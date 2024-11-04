@@ -1,0 +1,35 @@
+ {% extends 'Home.html' %}
+ {% block content %}
+ {% load static %}
+
+<table class="table">
+  <thead>
+    <tr>
+       <th></th>
+        <th></th>
+        <th></th>
+      <th scope="col">Hospital Name</th>
+      <th scope="col">Number of ICU</th>
+      <th scope="col">ICU Budget</th>
+      <th scope="col">Vacant</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for i in icuvac %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      <td>{{i.H_Name}}</td>
+      <td>{{i.Number_of_ICU}}</td>
+      <td>{{i.ICU_Budget}}</td>
+      <td>{{i.Vacant}}</td>
+
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+ {% endblock %}

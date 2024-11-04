@@ -1,0 +1,44 @@
+ {% extends 'Home.html' %}
+ {% block content %}
+ {% load static %}
+
+<table class="table">
+  <thead>
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      <th scope="col">Area Name</th>
+      <th scope="col">Ambulance Number</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for a in ambulance %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      <td>{{a.Area_name}}</td>
+      <td>{{a.A_Number}}</td>
+
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+ {% endblock %}

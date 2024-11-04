@@ -1,0 +1,41 @@
+ {% extends 'Home.html' %}
+ {% block content %}
+ {% load static %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th scope="col">Image</th>
+      <th scope="col">Hospital Name</th>
+        <th scope="col">Doctor ID</th>
+        <th scope="col">Doctor Name</th>
+      <th scope="col">Doctor Experience</th>
+      <th scope="col">Doctor Speciality</th>
+      <th scope="col">Availability</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for d in doctorlist %}
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><img src="{{d.image.url}}" style="height: 40px; width: 50px;"></td>
+      <td>{{d.H_Name}}</td>
+      <td>{{d.D_ID}}</td>
+      <td>{{d.D_Name}}</td>
+      <td>{{d.D_Experience}}</td>
+      <td>{{d.D_Speciality}}</td>
+      <td>{{d.Availability}}</td>
+
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

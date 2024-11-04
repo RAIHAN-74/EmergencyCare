@@ -1,0 +1,80 @@
+{% load static %}
+<meta name="viewport" content="device-width">
+<style>
+
+  .btn-light
+  {
+  font-size: 15px;
+  color: #000;
+  margin-right: 20px;
+  }
+</style>
+
+  <head>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  </head>
+  <body>
+<nav class="navbar navbar-expand-md navbar-info bg-info">
+    <div class="container-fluid">
+<a class="navbar-brand" href="{% url 'Home' %}" style="color: #000"><b>EmergencyCare</b>
+</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle Navigation">
+            <a class="btn btn-light">Menu</a>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" style="color: black;" role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                        Hospital
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                       <li>
+                         <a href="{% url 'hospital' %}" class="nav-link " style="color: black;">
+                            Hospitals
+                        </a>
+                        </li>
+                        <li>
+                         <a href="{% url 'Services' %}" class="nav-link " style="color: black;">
+                            Services
+                        </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'ICUVacancy' %}" class="nav-link " style="color: black;">
+                                ICU
+                            </a>
+                        </li>
+                        <li >
+                            <a href="{% url 'DoctorList' %}" class="nav-link" style="color: black;">
+                                Doctor's List
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item active">
+                    <a href="{% url 'Ambulance' %}" class="nav-link" style="color: black;">
+                        Ambulance Points
+                    </a>
+                </li>
+            </ul>
+
+           <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="Search">
+            <input type="submit" class="btn btn-outline-dark" value="Search">
+          </form>
+        </div>
+
+    </div>
+  <span><a class="btn btn-light" Hello, {{request.user}}></a></span>
+<span><a class="btn btn-danger" href="{% url 'logout' %}" style="margin-right: 10px; margin-top: 10px" >Logout</a></span>
+</nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>

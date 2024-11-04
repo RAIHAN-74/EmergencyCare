@@ -1,0 +1,39 @@
+{% extends 'Home.html' %}
+{% block content %}
+{% load static %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th scope="col">Logo</th>
+      <th scope="col">Hospital Name</th>
+      <th scope="col">Service ID</th>
+      <th scope="col">Service Name</th>
+      <th scope="col">Budget</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for s in service %}
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><img src="{{s.image.url}}" style="height: 40px; width: 40px;"></td>
+      <td>{{s.H_Name}}</td>
+      <td>{{s.S_ID}}</td>
+      <td>{{s.S_Name}}</td>
+      <td>{{s.S_Budget}}</td>
+    </tr>
+
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
