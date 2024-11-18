@@ -36,9 +36,17 @@
         <td></td>
       <td>{{a.Area_name}}</td>
       <td>{{a.A_Number}}</td>
-
+      {% if request.user.is_staff %}
+      <td><a href="{% url 'delete_ambulance' a.id %}" class="btn btn-danger">Delete</a></td>
+      <td><a href="{% url 'update_ambulance' a.id %}" class="btn btn-info">Update</a></td>
+      {% endif %}
     </tr>
   {% endfor %}
   </tbody>
 </table>
+ {% if request.user.is_staff %}
+ <div class = "d-grid gap-2 col-2 mx-auto" style="...">
+  <a href="{% url 'add_ambulance' %}" class = "btn btn-primary">Add Ambulance</a>
+ </div>
+ {% endif %}
  {% endblock %}

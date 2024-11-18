@@ -33,9 +33,17 @@
       <td>{{d.D_Experience}}</td>
       <td>{{d.D_Speciality}}</td>
       <td>{{d.Availability}}</td>
-
+      {% if request.user.is_staff %}
+      <td><a href="{% url 'delete_doctor' d.id %}" class="btn btn-danger">Delete</a></td>
+      <td><a href="{% url 'update_doctor' d.id %}" class="btn btn-info">Update</a></td>
+      {% endif %}
+    </tr>
   {% endfor %}
   </tbody>
 </table>
-
+  {% if request.user.is_staff %}
+ <div class = "d-grid gap-2 col-2 mx-auto" style="...">
+  <a href="{% url 'add_doctor' %}" class = "btn btn-primary">Add Doctor</a>
+ </div>
+ {% endif %}
 {% endblock %}

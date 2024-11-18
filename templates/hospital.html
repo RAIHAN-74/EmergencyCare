@@ -28,10 +28,20 @@
             <td>{{h.H_ID}}</td>
             <td>{{h.H_name}}</td>
             <td>{{h.Area_name}}</td>
+            {% if request.user.is_staff %}
+            <td><a href="{% url 'delete_hospital' h.id %}" class="btn btn-danger">Delete</a></td>
+            <td><a href="{% url 'update_hospital' h.id %}" class="btn btn-info">Update</a></td>
+            {% endif %}
+            <td><a href="{% url 'Details' h.id %}" class="btn btn-warning">Details</a></td>
 
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% if request.user.is_staff %}
+<div class="d-grid gap-2 col-2 mx-auto" style="...">
+    <a href="{% url 'add_hospital' %}" class="btn btn-primary">Add Hospital</a>
+</div>
 
+{% endif %}
 {% endblock %}
