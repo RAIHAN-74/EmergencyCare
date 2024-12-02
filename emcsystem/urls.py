@@ -32,7 +32,6 @@ urlpatterns = [
 	path('Hospital/',e_views.hospital,name='hospital'),
     path('add_hospital/',e_views.add_hospital,name='add_hospital'),
     path('Hospital/<str:id>',e_views.details, name='Details'),
-    path('add_hospital/',e_views.add_hospital,name='add_hospital'),
     path('update_hospital/<str:id>',e_views.update_hospital,name='update_hospital'),
     path('delete_hospital/<str:id>',e_views.delete_hospital,name='delete_hospital'),
 	path('Services/',e_views.services,name='Services'),
