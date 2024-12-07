@@ -52,4 +52,5 @@ urlpatterns = [
     path('delete_ICU/<str:id>',e_views.delete_ICU,name='delete_ICU'),
 
 ]
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

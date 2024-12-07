@@ -76,6 +76,8 @@ def search(request):
             return redirect('Hospital/')
         elif keyword.lower() == "services":
             return redirect('Services/')
+        elif keyword.lower() == "service":
+            return redirect('Services/')
         elif keyword.lower() == "doctor":
             return redirect('DoctorList/')
         elif keyword.lower() == "doctorlist":
@@ -87,7 +89,8 @@ def search(request):
 
     return render(request,template_name='Home.html')
 
-@login_required(login_url='login')
+
+#@login_required(login_url='login')
 def hospital(request):
     hospital = Hospital.objects.all()
     context={
@@ -147,7 +150,7 @@ def delete_hospital(request, id):
     return render(request, template_name='delete_hospital.html')
 
 
-@login_required(login_url='login')
+#@login_required(login_url='login')
 def services(request):
     service = Services.objects.all()
     context = {
@@ -190,7 +193,7 @@ def delete_service(request, id):
 
     return render(request, template_name='delete_service.html')
 
-@login_required(login_url='login')
+#@login_required(login_url='login')
 def ambulance(request):
     ambulance = Ambulance.objects.all()
     context = {
@@ -232,7 +235,7 @@ def delete_ambulance(request, id):
 
     return render(request, template_name='delete_ambulance.html')
 
-@login_required(login_url='login')
+#@login_required(login_url='login')
 def icuvac(request):
     icuvac = ICUVacancy.objects.all()
     context = {
@@ -274,7 +277,7 @@ def delete_ICU(request, id):
 
     return render(request, template_name='delete_ICU.html')
 
-@login_required(login_url='login')
+#@login_required(login_url='login')
 def doctorlist(request):
     doctorlist = DoctorList.objects.all()
     context = {
