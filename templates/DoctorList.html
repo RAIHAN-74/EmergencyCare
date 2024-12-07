@@ -3,19 +3,19 @@
 {% load static %}
 
 <style>
-  /* General Reset */
   body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
       height: 100vh;
+      overflow-x: hidden; /* Prevent horizontal scrolling */
       display: flex;
       flex-direction: column;
   }
 
   /* Navbar */
   nav {
-      background-color: #00cfff; /* Match sidebar and footer color */
+      background-color: #00cfff;
       color: white;
       padding: 10px;
       display: flex;
@@ -24,7 +24,7 @@
       position: fixed;
       width: 100%;
       top: 0;
-      z-index: 10; /* Ensure navbar stays on top */
+      z-index: 10;
   }
 
   nav .logo {
@@ -45,131 +45,162 @@
 
   /* Sidebar */
   .sidebar {
-      width: 20%;
-      background-color: #00cfff; /* Match navbar/footer color */
+      width: 250px; /* Adjust the width of the sidebar */
+      background-color: #00cfff;
       color: white;
       padding: 20px;
-      box-sizing: border-box;
-      height: 100vh;
-      position: fixed;
-      top: 50px; /* Align below navbar */
+      position: fixed; /* Fixed on the left side */
+      top: 60px; /* Adjusted to avoid overlap with the navbar */
       left: 0;
+      box-sizing: border-box;
+      bottom: 0;
       overflow-y: auto;
-      margin-top: 30px;
+      z-index: 5;
   }
 
-  .sidebar h2 {
-      margin-bottom: 20px;
-      color: white;
-  }
-
-  .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-  }
+  /* Sidebar List */
+.sidebar ul {
+    list-style: none;
+    padding: 100px 0 0 0; /* Add padding-top to create space at the top */
+    margin: 0;
+}
 
   .sidebar li {
-      padding: 10px;
+      padding: 15px;
       cursor: pointer;
       margin-bottom: 10px;
-      background-color: #008ecc;
+      background-color: #008ecc; /* Button background */
       border-radius: 5px;
       text-align: center;
-      color: white;
+      font-size: 1rem;
   }
 
   .sidebar li:hover {
-      background-color: #005f8b;
+      background-color: #005f8b; /* Change color on hover */
   }
 
   /* Main Content */
   .content {
-      margin-left: 10%; /* Leave space for fixed sidebar */
+      margin-left: 250px; /* Align content next to the sidebar */
       padding: 20px;
-      margin-top: 10px; /* Leave space for navbar */
-      width: 110%; /* Adjusted for proper alignment */
+      margin-top: 60px; /* Leave space for navbar */
+      width: calc(100% - 250px); /* Ensure content takes the remaining space */
       box-sizing: border-box;
-  }
-
-  .content h2 {
-      margin-bottom: 5px;
   }
 
   /* Table Styling */
   table {
-      width: 100%;
+      width: 107%; /* Make the table take up all available space */
       border-collapse: collapse;
-      margin-top: 5px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      border-radius: 8px; /* Rounded corners */
+      border-radius: 5px;
   }
 
+  /* Table Header */
   th, td {
       padding: 15px;
       border: 1px solid #ddd;
       text-align: center;
-      font-size: 14px;
   }
-
   th {
-      background-color: #008ecc; /* Darker shade for visibility */
-      color: white; /* White text for contrast */
+      background-color: #008ecc;
+      color: white;
       text-transform: uppercase;
       font-weight: bold;
   }
 
-  td {
-      color: #333; /* Dark text for readability */
-  }
-
   tr:nth-child(odd) {
-      background-color: #f9f9f9; /* Light background for alternate rows */
+      background-color: #f9f9f9;
   }
 
   tr:nth-child(even) {
-      background-color: #e6f7ff; /* Slightly darker alternate rows */
+      background-color: #e6f7ff;
   }
 
   tr:hover {
-      background-color: #b3e0ff; /* Highlight row on hover */
+      background-color: #b3e0ff;
       cursor: pointer;
   }
 
   td img {
-      border-radius: 50%; /* Rounded image for doctor photos */
-      border: 2px solid #00cfff; /* Border matches theme */
-      height: 40px;
-      width: 40px;
+      border-radius: 70%;
+      border: 2px solid #00cfff;
+      height: 50px;
+      width: 55px;
   }
 
   .btn-danger, .btn-info {
-      padding: 5px 10px;
+      padding: 5px 15px;
       font-size: 12px;
       border-radius: 5px;
       color: white;
       text-decoration: none;
-      display: inline-block;
+      display: block; /* Ensures buttons are stacked vertically */
       text-align: center;
+      width: 100%; /* Make them full width, so they are stacked properly */
   }
 
   .btn-danger {
-      background-color: #ff4d4d; /* Red for delete */
-      border: none;
+      background-color: #ff4d4d;
+      margin-bottom: 10px; /* Adds space between Delete and Update */
   }
 
   .btn-danger:hover {
-      background-color: #e60000; /* Darker red on hover */
+      background-color: #e60000;
   }
 
   .btn-info {
-      background-color: #00cfff; /* Match theme for update button */
-      border: none;
+      background-color: #00cfff;
   }
 
   .btn-info:hover {
-      background-color: #008ecc; /* Darker blue on hover */
+      background-color: #008ecc;
+  }
+
+  html, body {
+      width: 100%;
+      overflow-x: hidden;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+      .sidebar {
+          width: 100%;
+          height: auto;
+          position: static;
+          top: 0; /* Fix sidebar at the top */
+          margin-left: 0; /* Remove the left margin */
+      }
+
+      .content {
+          margin-left: 0;
+          width: 100%;
+      }
+
+      nav {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+
+      .sidebar ul {
+          padding-left: 10px;
+      }
+  }
+
+  /* Adjustments for full-screen and proper sidebar alignment */
+  @media (min-width: 768px) {
+      .content {
+          margin-left: 250px;
+      }
+
+      .sidebar {
+          position: fixed;
+          top: 60px; /* Keeps the sidebar below the navbar */
+          left: 0;
+          height: calc(100vh - 60px); /* Full-height sidebar */
+      }
   }
 </style>
 
@@ -248,3 +279,8 @@
   });
 </script>
 {% endblock %}
+
+{% block footer %}
+    <!-- Empty block to avoid including footer -->
+{% endblock %}
+
