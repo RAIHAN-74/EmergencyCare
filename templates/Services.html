@@ -2,46 +2,48 @@
 {% block content %}
 {% load static %}
 
-<table class="table">
-  <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th scope="col">Logo</th>
-      <th scope="col">Hospital Name</th>
-      <th scope="col">Service ID</th>
-      <th scope="col">Service Name</th>
-      <th scope="col">Budget</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for s in service %}
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><img src="{{s.image.url}}" style="height: 40px; width: 40px;"></td>
-      <td>{{s.H_Name}}</td>
-      <td>{{s.S_ID}}</td>
-      <td>{{s.S_Name}}</td>
-      <td>{{s.S_Budget}}</td>
-      {% if request.user.is_staff %}
-      <td><a href="{% url 'delete_service' s.id %}" class="btn btn-danger">Delete</a></td>
-      <td><a href="{% url 'update_service' s.id %}" class="btn btn-info">Update</a></td>
-      {% endif %}
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
- {% if request.user.is_staff %}
- <div class = "d-grid gap-2 col-2 mx-auto" style="...">
-  <a href="{% url 'add_service' %}" class = "btn btn-primary">Add Service</a>
- </div>
-{% endif %}
+<div style="padding: 20px; background-color: #f9f9f9;">
+    <h2 style="margin-bottom: 20px;">List of Hospital Services</h2>
+    {% if service %}
+    <table style="width: 100%; border-collapse: separate; border-spacing: 0 15px;">
+        <thead>
+            <tr style="background-color: #00aaff; color: white; text-align: left; padding: 10px;">
+                <th style="padding: 10px;">Logo</th>
+                <th style="padding: 10px;">Hospital Name</th>
+                <th style="padding: 10px;">Service ID</th>
+                <th style="padding: 10px;">Service Name</th>
+                <th style="padding: 10px;">Budget</th>
+                {% if request.user.is_staff %}
+                <th style="padding: 10px;">Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in service %}
+            <tr style="background-color: #e0e0e0; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;">
+                <td style="padding: 10px;"><img src="{{ s.image.url }}" style="height: 40px; width: 40px; border-radius: 50%;"></td>
+                <td style="padding: 10px; font-weight: bold;">{{ s.H_Name }}</td>
+                <td style="padding: 10px;">{{ s.S_ID }}</td>
+                <td style="padding: 10px;">{{ s.S_Name }}</td>
+                <td style="padding: 10px;">{{ s.S_Budget }}</td>
+                {% if request.user.is_staff %}
+                <td style="padding: 10px;">
+                    <a href="{% url 'delete_service' s.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="{% url 'update_service' s.id %}" class="btn btn-info btn-sm">Update</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No services found.</p>
+    {% endif %}
+    {% if request.user.is_staff %}
+    <div class="d-grid gap-2 col-2 mx-auto" style="margin-top: 20px;">
+        <a href="{% url 'add_service' %}" class="btn btn-primary">Add Service</a>
+    </div>
+    {% endif %}
+</div>
+
 {% endblock %}

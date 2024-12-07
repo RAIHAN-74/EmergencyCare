@@ -93,14 +93,14 @@
   }
 
   .content h2 {
-      margin-bottom: 20px;
+      margin-bottom: 5px;
   }
 
   /* Table Styling */
   table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 5px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
       overflow: hidden;
       border-radius: 8px; /* Rounded corners */
@@ -115,7 +115,7 @@
 
   th {
       background-color: #008ecc; /* Darker shade for visibility */
-      color: black; /* White text for contrast */
+      color: white; /* White text for contrast */
       text-transform: uppercase;
       font-weight: bold;
   }
@@ -140,6 +140,8 @@
   td img {
       border-radius: 50%; /* Rounded image for doctor photos */
       border: 2px solid #00cfff; /* Border matches theme */
+      height: 40px;
+      width: 40px;
   }
 
   .btn-danger, .btn-info {
@@ -169,13 +171,11 @@
   .btn-info:hover {
       background-color: #008ecc; /* Darker blue on hover */
   }
-
 </style>
 
 <div class="container">
     <!-- Sidebar -->
     <div class="sidebar">
-
         <ul>
             {% for hospital in doctorlist %}
             <li onclick="filterDoctors('{{ hospital.H_Name }}')">{{ hospital.H_Name }}</li>
@@ -186,7 +186,7 @@
     <!-- Content -->
     <div class="content">
         <h2>Doctors</h2>
-        <table class="table">
+        <table>
             <thead>
                 <tr>
                     <th>Image</th>
@@ -203,7 +203,7 @@
             <tbody id="doctorList">
                 {% for d in doctorlist %}
                 <tr data-hospital="{{ d.H_Name }}">
-                    <td><img src="{{ d.image.url }}" style="height: 40px; width: 50px;"></td>
+                    <td><img src="{{ d.image.url }}"></td>
                     <td>{{ d.D_ID }}</td>
                     <td>{{ d.D_Name }}</td>
                     <td>{{ d.D_Experience }}</td>

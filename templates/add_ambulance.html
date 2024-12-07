@@ -1,69 +1,102 @@
 {% extends 'Ambulance.html' %}
 {% block content %}
 {% load static %}
+
 <style>
-    {
+    /* Ensure the navbar stays fixed at the top */
+    body {
         margin: 0;
         padding: 0;
-        height: 100%;
-        background: #FFF;
+        background: #24a0ed;  /* Background color set to #24a0ed */
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Ensures full viewport height */
+    }
 
+    /* Fix the navbar at the top */
+    nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 9999; /* Ensure the navbar stays on top */
+    }
+
+    /* Adjust content to fit between navbar and footer */
+    .content-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1; /* Allow content to grow and take the available space */
+        padding-top: 80px; /* Ensure content doesn't overlap navbar */
+        padding-bottom: 60px; /* Ensure content doesn't overlap footer */
+        background: #24a0ed; /* Ensure content has the same background color as the body */
     }
 
     .user_card {
-        width: 350px;
-        margin-top: 50px;
-        margin-bottom: 5px;
-        background: #FFFFFF;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        padding: 10px;
+        width: 400px;
+        padding: 20px;
+        background: #ffffff;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        border-radius: 5px;
-
-    }
-
-    .form_container {
-        margin-top: 20px;
+        border-radius: 10px;
     }
 
     #form-title {
-        color: #000000;
-
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
     }
 
-    .login_btn {
-        width: 80%;
-        background: #00BFFF !important;
-        color: white !important;
+    .form_container {
+        margin-top: 10px;
     }
 
-    .login_btn:focus {
-        box-shadow: none !important;
-        outline: 0px !important;
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
     }
 
-    .login_container {
-        padding: 0 2rem;
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
     }
 
-    .input-group-text {
-        background: #00BFFF !important;
-        color: white !important;
-        border: 0 !important;
-        border-radius: 0.25rem 0 0 0.25rem !important;
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border: 1px solid #00bfff;
     }
 
+    .btn {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .btn.login_btn {
+        width: 100%;
+        background: #00bfff;
+        color: white;
+        transition: background 0.3s ease;
+    }
+
+    .btn.login_btn:hover {
+        background: #005f99;
+    }
+
+    /* Footer styling */
     .footer {
         background-color: #333;
         color: #fff;
         padding: 20px 0;
         text-align: center;
-        margin-top: 50px;
     }
 
     .footer-links ul {
@@ -99,29 +132,18 @@
     }
 </style>
 
-
-<div class="container h-100">
-    <div class="d-flex justify-content-center h-100">
-        <div class="user_card">
-            <div class="d-flex justify-content-center">
-
-
-                <h3 id="form-title">Add Ambulance</h3>
-            </div>
-            <div class="d-flex justify-content-center form_container">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    {{ form.as_p }}
-
-
-                    <div class="d-flex justify-content-center mt-3 login_container">
-                        <input class="btn login_btn" type="submit" value="Confirm">
-                    </div>
-                </form>
-            </div>
-
+<!-- Content section -->
+<div class="content-container">
+    <div class="user_card">
+        <h3 id="form-title">Add Ambulance</h3>
+        <div class="form_container">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn login_btn">Confirm</button>
+            </form>
         </div>
     </div>
 </div>
+
 {% endblock %}
