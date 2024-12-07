@@ -1,52 +1,43 @@
- {% extends 'Home.html' %}
- {% block content %}
- {% load static %}
+{% extends 'Home.html' %}
+{% block content %}
+{% load static %}
 
-<table class="table">
-  <thead>
-    <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-      <th scope="col">Area Name</th>
-      <th scope="col">Ambulance Number</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for a in ambulance %}
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      <td>{{a.Area_name}}</td>
-      <td>{{a.A_Number}}</td>
-      {% if request.user.is_staff %}
-      <td><a href="{% url 'delete_ambulance' a.id %}" class="btn btn-danger">Delete</a></td>
-      <td><a href="{% url 'update_ambulance' a.id %}" class="btn btn-info">Update</a></td>
-      {% endif %}
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
- {% if request.user.is_staff %}
- <div class = "d-grid gap-2 col-2 mx-auto" style="...">
-  <a href="{% url 'add_ambulance' %}" class = "btn btn-primary">Add Ambulance</a>
- </div>
- {% endif %}
- {% endblock %}
+<div style="padding: 20px; background-color: #f9f9f9;">
+    <h2 style="margin-bottom: 20px;">List of Ambulances</h2>
+    {% if ambulance %}
+    <table style="width: 100%; border-collapse: separate; border-spacing: 0 15px;">
+        <thead>
+            <tr style="background-color: #00aaff; color: white; text-align: left; padding: 10px;">
+                <th style="padding: 10px;">Area Name</th>
+                <th style="padding: 10px;">Ambulance Number</th>
+                {% if request.user.is_staff %}
+                <th style="padding: 10px;">Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in ambulance %}
+            <tr style="background-color: #e0e0e0; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;">
+                <td style="padding: 10px; font-weight: bold;">{{ a.Area_name }}</td>
+                <td style="padding: 10px;">{{ a.A_Number }}</td>
+                {% if request.user.is_staff %}
+                <td style="padding: 10px;">
+                    <a href="{% url 'delete_ambulance' a.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="{% url 'update_ambulance' a.id %}" class="btn btn-info btn-sm">Update</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No ambulances found.</p>
+    {% endif %}
+    {% if request.user.is_staff %}
+    <div class="d-grid gap-2 col-2 mx-auto" style="margin-top: 20px;">
+        <a href="{% url 'add_ambulance' %}" class="btn btn-primary">Add Ambulance</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

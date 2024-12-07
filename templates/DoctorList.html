@@ -1,49 +1,250 @@
- {% extends 'Home.html' %}
- {% block content %}
- {% load static %}
+{% extends 'Home.html' %}
+{% block content %}
+{% load static %}
 
-<table class="table">
-  <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th scope="col">Image</th>
-      <th scope="col">Hospital Name</th>
-        <th scope="col">Doctor ID</th>
-        <th scope="col">Doctor Name</th>
-      <th scope="col">Doctor Experience</th>
-      <th scope="col">Doctor Speciality</th>
-      <th scope="col">Availability</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for d in doctorlist %}
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><img src="{{d.image.url}}" style="height: 40px; width: 50px;"></td>
-      <td>{{d.H_Name}}</td>
-      <td>{{d.D_ID}}</td>
-      <td>{{d.D_Name}}</td>
-      <td>{{d.D_Experience}}</td>
-      <td>{{d.D_Speciality}}</td>
-      <td>{{d.Availability}}</td>
-      {% if request.user.is_staff %}
-      <td><a href="{% url 'delete_doctor' d.id %}" class="btn btn-danger">Delete</a></td>
-      <td><a href="{% url 'update_doctor' d.id %}" class="btn btn-info">Update</a></td>
-      {% endif %}
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
-  {% if request.user.is_staff %}
- <div class = "d-grid gap-2 col-2 mx-auto" style="...">
-  <a href="{% url 'add_doctor' %}" class = "btn btn-primary">Add Doctor</a>
- </div>
- {% endif %}
+<style>
+  /* General Reset */
+  body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+  }
+
+  /* Navbar */
+  nav {
+      background-color: #00cfff; /* Match sidebar and footer color */
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 10; /* Ensure navbar stays on top */
+  }
+
+  nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+  }
+
+  nav .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+  }
+
+  nav .actions a {
+      color: white;
+      text-decoration: none;
+  }
+
+  /* Sidebar */
+  .sidebar {
+      width: 20%;
+      background-color: #00cfff; /* Match navbar/footer color */
+      color: white;
+      padding: 20px;
+      box-sizing: border-box;
+      height: 100vh;
+      position: fixed;
+      top: 50px; /* Align below navbar */
+      left: 0;
+      overflow-y: auto;
+      margin-top: 30px;
+  }
+
+  .sidebar h2 {
+      margin-bottom: 20px;
+      color: white;
+  }
+
+  .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+
+  .sidebar li {
+      padding: 10px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      background-color: #008ecc;
+      border-radius: 5px;
+      text-align: center;
+      color: white;
+  }
+
+  .sidebar li:hover {
+      background-color: #005f8b;
+  }
+
+  /* Main Content */
+  .content {
+      margin-left: 10%; /* Leave space for fixed sidebar */
+      padding: 20px;
+      margin-top: 10px; /* Leave space for navbar */
+      width: 110%; /* Adjusted for proper alignment */
+      box-sizing: border-box;
+  }
+
+  .content h2 {
+      margin-bottom: 5px;
+  }
+
+  /* Table Styling */
+  table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+      overflow: hidden;
+      border-radius: 8px; /* Rounded corners */
+  }
+
+  th, td {
+      padding: 15px;
+      border: 1px solid #ddd;
+      text-align: center;
+      font-size: 14px;
+  }
+
+  th {
+      background-color: #008ecc; /* Darker shade for visibility */
+      color: white; /* White text for contrast */
+      text-transform: uppercase;
+      font-weight: bold;
+  }
+
+  td {
+      color: #333; /* Dark text for readability */
+  }
+
+  tr:nth-child(odd) {
+      background-color: #f9f9f9; /* Light background for alternate rows */
+  }
+
+  tr:nth-child(even) {
+      background-color: #e6f7ff; /* Slightly darker alternate rows */
+  }
+
+  tr:hover {
+      background-color: #b3e0ff; /* Highlight row on hover */
+      cursor: pointer;
+  }
+
+  td img {
+      border-radius: 50%; /* Rounded image for doctor photos */
+      border: 2px solid #00cfff; /* Border matches theme */
+      height: 40px;
+      width: 40px;
+  }
+
+  .btn-danger, .btn-info {
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 5px;
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+  }
+
+  .btn-danger {
+      background-color: #ff4d4d; /* Red for delete */
+      border: none;
+  }
+
+  .btn-danger:hover {
+      background-color: #e60000; /* Darker red on hover */
+  }
+
+  .btn-info {
+      background-color: #00cfff; /* Match theme for update button */
+      border: none;
+  }
+
+  .btn-info:hover {
+      background-color: #008ecc; /* Darker blue on hover */
+  }
+</style>
+
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+            {% for hospital in doctorlist %}
+            <li onclick="filterDoctors('{{ hospital.H_Name }}')">{{ hospital.H_Name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h2>Doctors</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Doctor ID</th>
+                    <th>Doctor Name</th>
+                    <th>Doctor Experience</th>
+                    <th>Doctor Speciality</th>
+                    <th>Availability</th>
+                    {% if request.user.is_staff %}
+                    <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody id="doctorList">
+                {% for d in doctorlist %}
+                <tr data-hospital="{{ d.H_Name }}">
+                    <td><img src="{{ d.image.url }}"></td>
+                    <td>{{ d.D_ID }}</td>
+                    <td>{{ d.D_Name }}</td>
+                    <td>{{ d.D_Experience }}</td>
+                    <td>{{ d.D_Speciality }}</td>
+                    <td>{{ d.Availability }}</td>
+                    {% if request.user.is_staff %}
+                    <td>
+                        <a href="{% url 'delete_doctor' d.id %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'update_doctor' d.id %}" class="btn btn-info">Update</a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if request.user.is_staff %}
+        <div class="d-grid gap-2 col-2 mx-auto">
+            <a href="{% url 'add_doctor' %}" class="btn btn-primary">Add Doctor</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+  function filterDoctors(hospitalName) {
+      const rows = document.querySelectorAll('#doctorList tr');
+      rows.forEach(row => {
+          if (row.dataset.hospital === hospitalName || hospitalName === 'All Hospitals') {
+              row.style.display = '';
+          } else {
+              row.style.display = 'none';
+          }
+      });
+  }
+
+  // Show all doctors by default
+  document.addEventListener('DOMContentLoaded', () => {
+      const firstHospital = document.querySelector('.sidebar ul li');
+      if (firstHospital) {
+          filterDoctors(firstHospital.textContent.trim());
+      }
+  });
+</script>
 {% endblock %}
