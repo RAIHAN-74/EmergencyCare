@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import F
 from math import radians, cos, sin, asin, sqrt
@@ -6,7 +6,8 @@ from geopy.distance import geodesic
 from emcsystem.decorators import unauthenticated_user,allowed_user,admin_only
 from .forms import *
 from .models import Location,Hospital,User,Ambulance,ICUVacancy,DoctorList,Services
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
 
 from django.contrib.auth import authenticate, login, logout
@@ -365,3 +366,16 @@ def nearby_hospital(request):
             return render(request, 'nearby_hospital.html', {'error': 'Invalid latitude or longitude format.'})
     else:
         return render(request, 'nearby_hospital.html', {'error': 'Latitude and Longitude are required.'})
+
+@login_required(login_url='login')
+def book_icu(request, id):
+    icu = get_object_or_404(ICUVacancy, pk=id)
+
+    if icu.Vacant > 0:
+        icu.Vacant -= 1
+        icu.save()
+        messages.success(request, 'ICU booked successfully!')
+    else:
+        messages.error(request, 'No ICU beds available!')
+
+    return HttpResponseRedirect(reverse('ICUVacancy'))

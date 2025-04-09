@@ -27,7 +27,7 @@ class ICUVacancy(models.Model):
     H_Name = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     Number_of_ICU = models.IntegerField(blank=True, null=True)
     ICU_Budget = models.IntegerField(blank=True, null=True)
-    Vacant = models.CharField(max_length=200,blank=True, null=True)
+    Vacant = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.Vacant

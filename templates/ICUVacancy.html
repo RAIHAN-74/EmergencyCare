@@ -2,6 +2,29 @@
 {% block content %}
 {% load static %}
 
+<!-- Message popups (toast-style) -->
+{% if messages %}
+<div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+  {% for message in messages %}
+    <div style="padding: 10px 20px; margin-bottom: 10px; border-radius: 5px; background-color: {% if message.tags == 'success' %}#4CAF50{% elif message.tags == 'error' %}#f44336{% else %}#2196F3{% endif %}; color: white; box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);">
+      {{ message }}
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  // Auto-dismiss messages after 3 seconds
+  setTimeout(function() {
+    const alerts = document.querySelectorAll('div[style*="z-index: 1000"] > div');
+    alerts.forEach(alert => {
+      alert.style.transition = 'opacity 0.5s ease';
+      alert.style.opacity = '0';
+      setTimeout(() => alert.remove(), 500);
+    });
+  }, 3000);
+</script>
+{% endif %}
+
 <div style="padding: 20px; background-color: #f9f9f9;">
     <h2 style="margin-bottom: 20px;">ICU Vacancy Information</h2>
     {% if icuvac %}
@@ -12,9 +35,7 @@
                 <th style="padding: 10px;">Number of ICU</th>
                 <th style="padding: 10px;">ICU Budget</th>
                 <th style="padding: 10px;">Vacant</th>
-                {% if request.user.is_staff %}
                 <th style="padding: 10px;">Actions</th>
-                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -24,12 +45,19 @@
                 <td style="padding: 10px;">{{ i.Number_of_ICU }}</td>
                 <td style="padding: 10px;">{{ i.ICU_Budget }}</td>
                 <td style="padding: 10px;">{{ i.Vacant }}</td>
-                {% if request.user.is_staff %}
                 <td style="padding: 10px;">
-                    <a href="{% url 'delete_ICU' i.id %}" class="btn btn-danger btn-sm">Delete</a>
-                    <a href="{% url 'update_ICU' i.id %}" class="btn btn-info btn-sm">Update</a>
+                    {% if request.user.is_staff %}
+                        <a href="{% url 'delete_ICU' i.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="{% url 'update_ICU' i.id %}" class="btn btn-info btn-sm">Update</a>
+                    {% endif %}
+                    {% if user.is_authenticated and not request.user.is_staff %}
+                        {% if i.Vacant|add:"0" > 0 %}
+                            <a href="{% url 'book_icu' i.id %}" class="btn btn-success btn-sm">Book</a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>Full</button>
+                        {% endif %}
+                    {% endif %}
                 </td>
-                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
@@ -37,6 +65,7 @@
     {% else %}
     <p>No ICU information found.</p>
     {% endif %}
+
     {% if request.user.is_staff %}
     <div class="d-grid gap-2 col-2 mx-auto" style="margin-top: 20px;">
         <a href="{% url 'add_ICU' %}" class="btn btn-primary">Add ICU</a>

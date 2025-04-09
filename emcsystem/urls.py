@@ -51,6 +51,8 @@ urlpatterns = [
     path('update_ICU/<str:id>',e_views.update_ICU,name='update_ICU'),
     path('delete_ICU/<str:id>',e_views.delete_ICU,name='delete_ICU'),
     path('nearby-hospitals/', e_views.nearby_hospital, name='nearby_hospital'),
+    path('book_icu/<int:id>/', e_views.book_icu, name='book_icu'),
+
 
 
 
