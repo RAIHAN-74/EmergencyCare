@@ -11,7 +11,8 @@ class Hospital(models.Model):
     H_ID = models.CharField(max_length=200)
     H_name = models.CharField(max_length=200)
     Area_name = models.ForeignKey(Location, on_delete=models.CASCADE)
-
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
     image = models.ImageField(upload_to='images/',blank=True, null=True, default='images/default.jpg')
 
     def __str__(self):

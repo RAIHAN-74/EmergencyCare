@@ -50,6 +50,9 @@ urlpatterns = [
     path('add_ICU/',e_views.add_ICU,name='add_ICU'),
     path('update_ICU/<str:id>',e_views.update_ICU,name='update_ICU'),
     path('delete_ICU/<str:id>',e_views.delete_ICU,name='delete_ICU'),
+    path('nearby-hospitals/', e_views.nearby_hospital, name='nearby_hospital'),
+
+
 
 ]
 

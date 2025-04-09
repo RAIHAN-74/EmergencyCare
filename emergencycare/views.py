@@ -1,5 +1,8 @@
 from django.shortcuts import render,redirect
-
+from django.http import JsonResponse
+from django.db.models import F
+from math import radians, cos, sin, asin, sqrt
+from geopy.distance import geodesic
 from emcsystem.decorators import unauthenticated_user,allowed_user,admin_only
 from .forms import *
 from .models import Location,Hospital,User,Ambulance,ICUVacancy,DoctorList,Services
@@ -321,3 +324,44 @@ def delete_doctor(request, id):
 
     return render(request, template_name='delete_doctor.html')
 
+# def haversine(lat1, lon1, lat2, lon2):
+#
+#     R = 6371
+#     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+#     dlat = lat2 - lat1
+#     dlon = lon2 - lon1
+#     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+#     c = 2 * asin(sqrt(a))
+#     return R * c
+
+
+def nearby_hospital(request):
+    # Get latitude and longitude from GET parameters
+    user_lat = request.GET.get('lat')
+    user_lng = request.GET.get('lng')
+
+    if user_lat and user_lng:
+        try:
+            user_lat = float(user_lat)
+            user_lng = float(user_lng)
+
+            hospitals = Hospital.objects.all()
+            nearby_hospitals = []
+
+            for h in hospitals:
+                hospital_location = (h.latitude, h.longitude)
+                user_location = (user_lat, user_lng)
+
+                # Calculate the distance
+                distance = geodesic(user_location, hospital_location).kilometers
+
+                # Add hospitals within a 10 km radius
+                if distance <= 10:
+                    nearby_hospitals.append({'name': h.H_name})
+
+            return render(request, 'nearby_hospital.html', {'hospitals': nearby_hospitals})
+
+        except ValueError:
+            return render(request, 'nearby_hospital.html', {'error': 'Invalid latitude or longitude format.'})
+    else:
+        return render(request, 'nearby_hospital.html', {'error': 'Latitude and Longitude are required.'})

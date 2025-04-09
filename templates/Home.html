@@ -3,11 +3,10 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <meta name="viewport" content="device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Emergency Care</title>
     <style>
-
         header {
             background-color: #fdfbfb;
             color: #0a0909;
@@ -16,10 +15,8 @@
         }
         .image-container {
             text-align: center;
-            padding-top: 0px; /* Adjust top spacing as needed */
-            padding-bottom: 50px; /* Adjust bottom spacing as needed */
+            padding-bottom: 50px;
         }
-
         .image-container img {
             max-width: 100%;
             height: auto;
@@ -30,25 +27,61 @@
 
 {% include 'Navbar.html' %}
 
-
 {% block content %}
 {% load static %}
-
 <header>
-        <h1>Emergency Care</h1>
-    </header>
+    <h1>Emergency Care</h1>
+</header>
 
- <div class="image-container">
-        <img src="{% static 'images/images/Heading.png' %}">
-    </div>
+<div class="image-container">
+    <img src="{% static 'images/images/Heading.png' %}" alt="Emergency Care">
+</div>
+
+<div class="container text-center">
+    <button class="btn btn-primary" onclick="getLocation()">Find Nearby Hospitals</button>
+</div>
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(sendLocation, showError);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function sendLocation(position) {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+        window.location.href = `/nearby-hospitals/?lat=${latitude}&lng=${longitude}`;
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred.");
+                break;
+        }
+    }
+</script>
+
 {% endblock %}
+
 {% block footer %}
 {% include 'footer.html' %}
 {% endblock %}
 
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
