@@ -17,18 +17,22 @@
         <h5 class="card-title" align="center"><b>Hospital ID:</b> {{ hospital.H_ID }}</h5>
         <p class="card-text"><b>Hospital Name:</b> {{ hospital.H_name }}</p>
         <p class="card-text"><small class="text-body-secondary"><b>Area Name:</b> {{ hospital.Area_name }}</small></p>
-
         <h6 class="card-title" align="center"><b>ICU Details</b></h6>
         {% for i in icuvac %}
         <p class="card-text"><b>Number of ICU:</b> {{ i.Number_of_ICU }}</p>
             <p class="card-text"><b>Budget:</b> {{ i.ICU_Budget }}</p>
             <p class="card-text"><b>Vacant:</b> {{ i.Vacant }}</p>
         {% endfor %}
+        <h6 class="card-title" align="center"><b>NICU Details</b></h6>
+        {% for n in nicu %}
+        <p class="card-text"><b>Number of NICU:</b> {{ n.Number_of_NICU }}</p>
+            <p class="card-text"><b>Budget:</b> {{ n.NICU_Budget }}</p>
+            <p class="card-text"><b>Vacant:</b> {{ n.Vacant }}</p>
+        {% endfor %}
         <h6 class="card-title" align="center"><b>Available Services</b></h6>
         {% for s in services %}
         <p class="card-text"><b>Service ID:</b> {{ s.S_ID }}</p>
             <p class="card-text"><b>Name:</b> {{ s.S_Name }}</p>
-            <p class="card-text"><b>Budget:</b> {{ s.S_Budget }}</p>
         {% endfor %}
         <h6 class="card-title" align="center"><b>Doctors</b></h6>
         {% for d in doctorlist %}

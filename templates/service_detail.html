@@ -1,0 +1,24 @@
+{% extends 'Home.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Service: {{ service.S_Name }}</h2>
+    <table class="table table-bordered mt-3">
+        <thead class="table-info">
+            <tr>
+                <th>Type</th>
+                <th>Intensity</th>
+                <th>Budget</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in details %}
+            <tr>
+                <td>{{ d.type }}</td>
+                <td>{{ d.intensity }}</td>
+                <td>{{ d.estimated_budget }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

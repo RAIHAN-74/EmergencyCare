@@ -28,7 +28,7 @@
   }
 
   nav .logo {
-      font-size: 1.5rem;
+      font-size: 2 rem;
       font-weight: bold;
   }
 
@@ -208,15 +208,16 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <ul>
-            {% for hospital in doctorlist %}
-            <li onclick="filterDoctors('{{ hospital.H_Name }}')">{{ hospital.H_Name }}</li>
-            {% endfor %}
-        </ul>
+    {% for hospital in hospitals %}
+        <li onclick="filterDoctors('{{ hospital }}')">{{ hospital }}</li>
+    {% endfor %}
+</ul>
+
+
     </div>
 
     <!-- Content -->
     <div class="content">
-        <h2>Doctors</h2>
         <table>
             <thead>
                 <tr>
@@ -281,6 +282,6 @@
 {% endblock %}
 
 {% block footer %}
-    <!-- Empty block to avoid including footer -->
+
 {% endblock %}
 

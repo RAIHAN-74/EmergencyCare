@@ -37,43 +37,6 @@
     <img src="{% static 'images/images/Heading.png' %}" alt="Emergency Care">
 </div>
 
-<div class="container text-center">
-    <button class="btn btn-primary" onclick="getLocation()">Find Nearby Hospitals</button>
-</div>
-
-<script>
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(sendLocation, showError);
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
-    }
-
-    function sendLocation(position) {
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
-        window.location.href = `/nearby-hospitals/?lat=${latitude}&lng=${longitude}`;
-    }
-
-    function showError(error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                alert("User denied the request for Geolocation.");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                alert("Location information is unavailable.");
-                break;
-            case error.TIMEOUT:
-                alert("The request to get user location timed out.");
-                break;
-            case error.UNKNOWN_ERROR:
-                alert("An unknown error occurred.");
-                break;
-        }
-    }
-</script>
-
 {% endblock %}
 
 {% block footer %}

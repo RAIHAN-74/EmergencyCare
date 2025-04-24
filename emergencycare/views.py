@@ -1,11 +1,9 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import F
-from math import radians, cos, sin, asin, sqrt
-from geopy.distance import geodesic
 from emcsystem.decorators import unauthenticated_user,allowed_user,admin_only
 from .forms import *
-from .models import Location,Hospital,User,Ambulance,ICUVacancy,DoctorList,Services
+from .models import Location,Hospital,User,Ambulance,ICUVacancy,DoctorList,Services,CCU,NICUBooking
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
@@ -73,26 +71,6 @@ def logoutUser(request):
 @login_required(login_url='login')
 def location(request):
     return render(request,template_name='Home.html')
-def search(request):
-    if request.method == "POST":
-        keyword = request.POST.get('Search')
-        if keyword.lower() == "hospital":
-            return redirect('Hospital/')
-        elif keyword.lower() == "services":
-            return redirect('Services/')
-        elif keyword.lower() == "service":
-            return redirect('Services/')
-        elif keyword.lower() == "doctor":
-            return redirect('DoctorList/')
-        elif keyword.lower() == "doctorlist":
-            return redirect('DoctorList/')
-        elif keyword.lower() == "ambulance":
-            return redirect('Ambulance/')
-        elif keyword.lower() == "icu":
-            return redirect('ICUVacancy/')
-
-    return render(request,template_name='Home.html')
-
 
 #@login_required(login_url='login')
 def hospital(request):
@@ -104,14 +82,17 @@ def hospital(request):
 def details(request, id):
     hospital = Hospital.objects.get(pk=id)
     icuvac = ICUVacancy.objects.filter(H_Name=id)
+    nicu = NICU.objects.filter(H_Name=id)
     services = Services.objects.filter(H_Name=id)
     doctorlist = DoctorList.objects.filter(H_Name=id)
 
     context = {
         'hospital': hospital,
         'icuvac': icuvac,
+        'nicu' : nicu,
         'services': services,
-        'doctorlist':doctorlist
+        'doctorlist':doctorlist,
+
 
     }
     return render(request, template_name='Details.html', context=context)
@@ -161,6 +142,12 @@ def services(request):
         'service': service,
     }
     return render(request, template_name='Services.html',context=context)
+
+def service_details(request, id):
+    service = get_object_or_404(Services, pk=id)
+    details = ServiceDetail.objects.filter(service=service)
+    return render(request, 'service_detail.html', {'service': service, 'details': details})
+
 @allowed_user(allowed_roles=['Admin'])
 def add_service(request):
     form = ServiceForm()
@@ -281,13 +268,105 @@ def delete_ICU(request, id):
 
     return render(request, template_name='delete_ICU.html')
 
+@login_required(login_url='login')
+def book_icu(request, id):
+    icu = get_object_or_404(CCU, pk=id)
+
+    if request.method == 'POST':
+        form = ICUBookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.icu = icu
+
+            if icu.Vacant > 0:
+                icu.Vacant -= 1
+                icu.save()
+                booking.save()
+                messages.success(request, 'ICU booked successfully!')
+                return redirect('ICUVacancy')
+            else:
+                messages.error(request, 'No ICU beds available!')
+                return redirect('ICUVacancy')
+    else:
+        form = ICUBookingForm()
+
+    return render(request, 'book_icu_form.html', {'form': form, 'icu': icu})
+def ccu(request):
+    ccu = CCU.objects.all()
+    context = {
+        'ccu': ccu,
+    }
+    return render(request, template_name='CCU.html',context=context)
+
+@login_required(login_url='login')
+def book_ccu(request, id):
+    ccu = get_object_or_404(CCU, pk=id)
+
+    if request.method == 'POST':
+        form = CCUBookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.ccu = ccu
+
+            if ccu.Vacant > 0:
+                ccu.Vacant -= 1
+                ccu.save()
+                booking.save()
+                messages.success(request, 'CCU booked successfully!')
+                return redirect('CCU')
+            else:
+                messages.error(request, 'No CCU beds available!')
+                return redirect('CCU')
+    else:
+        form = CCUBookingForm()
+
+    return render(request, 'book_ccu_form.html', {'form': form, 'ccu': ccu})
+def nicu(request):
+    nicu = NICU.objects.all()
+    context = {
+        'nicu': nicu,
+    }
+    return render(request, template_name='NICU.html',context=context)
+
+@login_required(login_url='login')
+def book_nicu(request, id):
+    nicu = get_object_or_404(NICU, pk=id)
+
+    if request.method == 'POST':
+        form = NICUBookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.nicu = nicu
+
+            if nicu.Vacant > 0:
+                nicu.Vacant -= 1
+                nicu.save()
+                booking.save()
+                messages.success(request, 'NICU booked successfully!')
+                return redirect('NICU')
+            else:
+                messages.error(request, 'No NICU beds available!')
+                return redirect('NICU')
+    else:
+        form = NICUBookingForm()
+
+    return render(request, 'book_nicu_form.html', {'form': form, 'nicu': nicu})
 #@login_required(login_url='login')
 def doctorlist(request):
     doctorlist = DoctorList.objects.all()
+
+    # Get unique hospital names using ForeignKey relationship
+    hospitals = DoctorList.objects.values_list('H_Name__H_name', flat=True).distinct()
+
     context = {
         'doctorlist': doctorlist,
+        'hospitals': hospitals,
     }
     return render(request, 'DoctorList.html', context=context)
+
 
 @allowed_user(allowed_roles=['Admin'])
 def add_doctor(request):
@@ -325,57 +404,3 @@ def delete_doctor(request, id):
 
     return render(request, template_name='delete_doctor.html')
 
-# def haversine(lat1, lon1, lat2, lon2):
-#
-#     R = 6371
-#     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
-#     dlat = lat2 - lat1
-#     dlon = lon2 - lon1
-#     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-#     c = 2 * asin(sqrt(a))
-#     return R * c
-
-
-def nearby_hospital(request):
-    # Get latitude and longitude from GET parameters
-    user_lat = request.GET.get('lat')
-    user_lng = request.GET.get('lng')
-
-    if user_lat and user_lng:
-        try:
-            user_lat = float(user_lat)
-            user_lng = float(user_lng)
-
-            hospitals = Hospital.objects.all()
-            nearby_hospitals = []
-
-            for h in hospitals:
-                hospital_location = (h.latitude, h.longitude)
-                user_location = (user_lat, user_lng)
-
-                # Calculate the distance
-                distance = geodesic(user_location, hospital_location).kilometers
-
-                # Add hospitals within a 10 km radius
-                if distance <= 10:
-                    nearby_hospitals.append({'name': h.H_name})
-
-            return render(request, 'nearby_hospital.html', {'hospitals': nearby_hospitals})
-
-        except ValueError:
-            return render(request, 'nearby_hospital.html', {'error': 'Invalid latitude or longitude format.'})
-    else:
-        return render(request, 'nearby_hospital.html', {'error': 'Latitude and Longitude are required.'})
-
-@login_required(login_url='login')
-def book_icu(request, id):
-    icu = get_object_or_404(ICUVacancy, pk=id)
-
-    if icu.Vacant > 0:
-        icu.Vacant -= 1
-        icu.save()
-        messages.success(request, 'ICU booked successfully!')
-    else:
-        messages.error(request, 'No ICU beds available!')
-
-    return HttpResponseRedirect(reverse('ICUVacancy'))

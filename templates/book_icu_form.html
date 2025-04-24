@@ -1,0 +1,99 @@
+{% extends 'Home.html' %}
+{% block content %}
+
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		background: #fff !important;
+	}
+	.user_card {
+		width: 350px;
+		margin: 50px auto;
+		background: #FFFFFF;
+		display: flex;
+		flex-direction: column;
+		padding: 20px;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		border-radius: 5px;
+	}
+
+	.form_container {
+		margin-top: 20px;
+	}
+
+	#form-title {
+		color: #000000;
+		text-align: center;
+		margin-bottom: 20px;
+	}
+
+	.login_btn {
+		width: 100%;
+		background: #00BFFF !important;
+		color: white !important;
+		border: none;
+		padding: 10px;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	.login_btn:hover {
+		background: #009acd !important;
+	}
+	.login_btn:focus {
+		box-shadow: none !important;
+		outline: 0px !important;
+	}
+
+	.footer {
+		background-color: #333;
+		color: #fff;
+		padding: 20px 0;
+		text-align: center;
+		margin-top: 50px;
+	}
+
+	.footer-links ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.footer-links ul li {
+		display: inline;
+		margin: 0 10px;
+	}
+
+	.footer-links ul li a {
+		color: #fff;
+		text-decoration: none;
+	}
+
+	.footer-social ul {
+		list-style: none;
+		padding: 0;
+		margin: 10px 0;
+	}
+
+	.footer-social ul li {
+		display: inline;
+		margin: 0 10px;
+	}
+
+	.footer-social ul li a {
+		color: #fff;
+		text-decoration: none;
+	}
+</style>
+
+<div class="user_card">
+	<h3 id="form-title">ICU at {{ icu.H_Name }}</h3>
+	<form method="POST" class="form_container">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="btn login_btn" >Book</button>
+	</form>
+</div>
+
+{% endblock %}

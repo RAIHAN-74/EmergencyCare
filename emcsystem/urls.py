@@ -27,7 +27,6 @@ urlpatterns = [
     path('login/',e_views.loginPage,name='login'),
     path('logout/',e_views.logoutUser,name='logout'),
     path('admin/', admin.site.urls),
-	path('search',e_views.search,name='search'),
     path('Users/',e_views.users,name='Users'),
 	path('Hospital/',e_views.hospital,name='hospital'),
     path('add_hospital/',e_views.add_hospital,name='add_hospital'),
@@ -35,6 +34,7 @@ urlpatterns = [
     path('update_hospital/<str:id>',e_views.update_hospital,name='update_hospital'),
     path('delete_hospital/<str:id>',e_views.delete_hospital,name='delete_hospital'),
 	path('Services/',e_views.services,name='Services'),
+    path('service_details/<int:id>/', e_views.service_details, name='service_details'),
     path('add_service/',e_views.add_service,name='add_service'),
     path('update_service/<str:id>',e_views.update_service,name='update_service'),
     path('delete_service/<str:id>',e_views.delete_service,name='delete_service'),
@@ -43,6 +43,8 @@ urlpatterns = [
     path('update_ambulance/<str:id>',e_views.update_ambulance,name='update_ambulance'),
     path('delete_ambulance/<str:id>',e_views.delete_ambulance,name='delete_ambulance'),
 	path('ICUVacancy/',e_views.icuvac,name='ICUVacancy'),
+    path('CCU/',e_views.ccu,name='CCU'),
+    path('NICU/',e_views.nicu,name='NICU'),
 	path('DoctorList/',e_views.doctorlist,name='DoctorList'),
     path('add_doctor/',e_views.add_doctor,name='add_doctor'),
     path('update_doctor/<str:id>',e_views.update_doctor,name='update_doctor'),
@@ -50,12 +52,10 @@ urlpatterns = [
     path('add_ICU/',e_views.add_ICU,name='add_ICU'),
     path('update_ICU/<str:id>',e_views.update_ICU,name='update_ICU'),
     path('delete_ICU/<str:id>',e_views.delete_ICU,name='delete_ICU'),
-    path('nearby-hospitals/', e_views.nearby_hospital, name='nearby_hospital'),
     path('book_icu/<int:id>/', e_views.book_icu, name='book_icu'),
-
-
-
-
+    path('book_ccu/<int:id>/', e_views.book_ccu, name='book_ccu'),
+    path('book_nicu/<int:id>/', e_views.book_nicu, name='book_nicu'),
 ]
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

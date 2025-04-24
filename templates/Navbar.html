@@ -25,35 +25,47 @@
                 aria-expanded="false" aria-label="Toggle Navigation">
             <a class="btn btn-light">Menu</a>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a href="{% url 'hospital' %}" class="nav-link" style="color: black;">
+                        Hospital
+                    </a>
+                </li>
+        <li class="nav-item active">
+                    <a href="{% url 'DoctorList' %}" class="nav-link" style="color: black;">
+                        Doctors
+                    </a>
+        </li>
+                <li class="nav-item active">
+                    <a href="{% url 'Services' %}" class="nav-link" style="color: black;">
+                        Services
+                    </a>
+        </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" style="color: black;" role="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false">
-                        Hospital
+                        ICU
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                        <li>
-                         <a href="{% url 'hospital' %}" class="nav-link " style="color: black;">
-                            Hospitals
+                         <a href="{% url 'ICUVacancy' %}" class="nav-link " style="color: black;">
+                            ICU
                         </a>
                         </li>
                         <li>
-                         <a href="{% url 'Services' %}" class="nav-link " style="color: black;">
-                            Services
+                         <a href="{% url 'CCU' %}" class="nav-link " style="color: black;">
+                            CCU
                         </a>
                         </li>
                         <li>
-                            <a href="{% url 'ICUVacancy' %}" class="nav-link " style="color: black;">
-                                ICU
+                            <a href="{% url 'NICU' %}" class="nav-link " style="color: black;">
+                                NICU
                             </a>
                         </li>
-                        <li >
-                            <a href="{% url 'DoctorList' %}" class="nav-link" style="color: black;">
-                                Doctor's List
-                            </a>
-                        </li>
+
                     </ul>
                 </li>
 
@@ -64,11 +76,7 @@
                 </li>
             </ul>
 
-           <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">
-            {% csrf_token %}
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="Search">
-            <input type="submit" class="btn btn-outline-dark" value="Search">
-          </form>
+
         </div>
 
     </div>

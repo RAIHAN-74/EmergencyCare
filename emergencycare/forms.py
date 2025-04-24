@@ -36,4 +36,20 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+class ICUBookingForm(forms.ModelForm):
+    class Meta:
+        model = ICUBooking
+        fields = ['patient_name', 'contact' ]
+
+class NICUBookingForm(forms.ModelForm):
+    class Meta:
+        model = NICUBooking
+        fields = ['guardian_name', 'contact','baby_name' ,'baby_condition', 'requirements' ]
+class CCUBookingForm(forms.ModelForm):
+    class Meta:
+        model = CCUBooking
+        fields = ['patient_name', 'contact', 'patient_condition']
+
+
+
 

@@ -10,6 +10,7 @@
             <tr style="background-color: #00aaff; color: white; text-align: left; padding: 10px;">
                 <th style="padding: 10px;">Area Name</th>
                 <th style="padding: 10px;">Ambulance Number</th>
+                <th style="padding: 10px;">Contact</th>
                 {% if request.user.is_staff %}
                 <th style="padding: 10px;">Actions</th>
                 {% endif %}
@@ -20,6 +21,7 @@
             <tr style="background-color: #e0e0e0; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;">
                 <td style="padding: 10px; font-weight: bold;">{{ a.Area_name }}</td>
                 <td style="padding: 10px;">{{ a.A_Number }}</td>
+                <td style="padding: 10px;">{{a.Contact_Number}}</td>
                 {% if request.user.is_staff %}
                 <td style="padding: 10px;">
                     <a href="{% url 'delete_ambulance' a.id %}" class="btn btn-danger btn-sm">Delete</a>
