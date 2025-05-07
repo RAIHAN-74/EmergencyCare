@@ -27,25 +27,23 @@ def profile(request):
         return redirect('Home.html')
 @unauthenticated_user
 def registerPage(request):
-
     form = CreateUserForm()
 
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save()  # Save the user and the profile
             username = form.cleaned_data.get('username')
-            group = Group.objects.get(name = 'User')
+            group = Group.objects.get(name='User')  # Add the user to the 'User' group
             user.groups.add(group)
 
-            messages.success(request, message='Account was created for ' + username)
-
+            messages.success(request, f"Account was created for {username}")
             return redirect('login')
 
     context = {
-         'form': form
-        }
-    return render(request, template_name='Register.html', context=context)
+        'form': form
+    }
+    return render(request, 'Register.html', context)
 
 @unauthenticated_user
 def loginPage(request):
@@ -79,24 +77,55 @@ def hospital(request):
        'hospital':hospital,
     }
     return render(request,template_name='hospital.html',context=context)
-def details(request, id):
-    hospital = Hospital.objects.get(pk=id)
-    icuvac = ICUVacancy.objects.filter(H_Name=id)
-    nicu = NICU.objects.filter(H_Name=id)
-    services = Services.objects.filter(H_Name=id)
-    doctorlist = DoctorList.objects.filter(H_Name=id)
 
+
+from django.shortcuts import render, get_object_or_404
+from .models import Hospital, ICUVacancy, NICU, Services, DoctorList
+
+
+def details(request, id):
+    # Use H_ID to get the hospital instance
+    hospital = get_object_or_404(Hospital, H_ID=id)
+
+    # Filter related data using H_ID
+    icuvac = ICUVacancy.objects.filter(H_Name=hospital)
+    nicu = NICU.objects.filter(H_Name=hospital)
+    services = Services.objects.filter(H_Name=hospital)
+    doctorlist = DoctorList.objects.filter(H_Name=hospital)
+
+    # Pass all the data to the context
     context = {
         'hospital': hospital,
         'icuvac': icuvac,
-        'nicu' : nicu,
+        'nicu': nicu,
         'services': services,
-        'doctorlist':doctorlist,
-
-
+        'doctorlist': doctorlist,
     }
-    return render(request, template_name='Details.html', context=context)
 
+    return render(request, 'Details.html', context)
+
+
+@login_required
+def nearby_hospitals(request):
+    profile = request.user.profile
+    user_location = profile.Area_name
+
+    if user_location and user_location.Location_Number is not None:
+        user_loc_num = user_location.Location_Number
+        hospitals = Hospital.objects.filter(Area_name__Location_Number__isnull=False)
+        hospital_distances = [
+            {
+                'hospital': h,
+                'distance': abs(h.Area_name.Location_Number - user_loc_num)
+            }
+            for h in hospitals
+            if abs(h.Area_name.Location_Number - user_loc_num) <= 5
+        ]
+        sorted_hospitals = sorted(hospital_distances, key=lambda x: x['distance'])
+    else:
+        sorted_hospitals = []
+
+    return render(request, 'nearby_hospital.html', {'hospital_distances': sorted_hospitals})
 
 @allowed_user(allowed_roles=['Admin'])
 def add_hospital(request):

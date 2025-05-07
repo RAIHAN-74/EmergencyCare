@@ -1,0 +1,37 @@
+{% extends 'Home.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Nearby Hospitals</h2>
+
+    {% if hospital_distances %}
+        <div class="row justify-content-center">
+            {% for item in hospital_distances %}
+                <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                    <div class="card shadow-sm rounded-3 h-100" style="font-size: 0.9rem;">
+                        {% if item.hospital.image %}
+                            <img src="{{ item.hospital.image.url }}" class="card-img-top rounded-top" alt="{{ item.hospital.H_name }}" style="max-height: 160px; object-fit: contain;">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" class="card-img-top rounded-top" alt="Default hospital image" style="max-height: 160px; object-fit: contain;">
+                        {% endif %}
+                        <div class="card-body p-3 d-flex flex-column">
+                            <h6 class="card-title mb-2">{{ item.hospital.H_name }}</h6>
+                            <p class="card-text mb-1">
+                                <i class="bi bi-geo-alt-fill"></i> <strong>Area:</strong> {{ item.hospital.Area_name }}
+                            </p>
+                            <p class="card-text">
+                                <i class="bi bi-map-fill"></i> <strong>Distance:</strong> {{ item.distance }} km
+                            </p>
+                            <a href="{% url 'Details' id=item.hospital.H_ID %}" class="btn btn-warning btn-sm">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            No nearby hospitals found or location not set in your profile.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

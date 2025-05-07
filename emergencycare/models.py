@@ -4,9 +4,15 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Location(models.Model):
     Area_name = models.CharField(max_length=200)
+    Location_Number = models.IntegerField(blank=True,null=True)
     def __str__(self):
         return self.Area_name
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    Area_name = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.user.username}'s profile"
 class Hospital(models.Model):
     H_ID = models.CharField(max_length=200)
     H_name = models.CharField(max_length=200)

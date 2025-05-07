@@ -30,7 +30,7 @@ urlpatterns = [
     path('Users/',e_views.users,name='Users'),
 	path('Hospital/',e_views.hospital,name='hospital'),
     path('add_hospital/',e_views.add_hospital,name='add_hospital'),
-    path('Hospital/<str:id>',e_views.details, name='Details'),
+    path('hospital/details/<str:id>/', e_views.details, name='Details'),
     path('update_hospital/<str:id>',e_views.update_hospital,name='update_hospital'),
     path('delete_hospital/<str:id>',e_views.delete_hospital,name='delete_hospital'),
 	path('Services/',e_views.services,name='Services'),
@@ -55,6 +55,7 @@ urlpatterns = [
     path('book_icu/<int:id>/', e_views.book_icu, name='book_icu'),
     path('book_ccu/<int:id>/', e_views.book_ccu, name='book_ccu'),
     path('book_nicu/<int:id>/', e_views.book_nicu, name='book_nicu'),
+    path('nearby-hospitals/', e_views.nearby_hospitals, name='nearby_hospital'),
 ]
 
 
