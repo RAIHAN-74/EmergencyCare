@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 class Location(models.Model):
     Area_name = models.CharField(max_length=200)
     Location_Number = models.IntegerField(blank=True,null=True)
@@ -91,6 +90,7 @@ class NICUBooking(models.Model):
     guardian_name = models.CharField(max_length=100)
     contact = models.CharField(max_length=15)
     baby_name = models.CharField(max_length=100,null=True,blank=True)
+    baby_age = models.CharField(max_length=50, blank=True, null=True)
     CONDITION_CHOICES = [
         ('stable', 'Stable'),
         ('bad', 'Bad'),

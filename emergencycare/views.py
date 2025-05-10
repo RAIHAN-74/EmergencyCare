@@ -3,15 +3,12 @@ from django.http import JsonResponse
 from django.db.models import F
 from emcsystem.decorators import unauthenticated_user,allowed_user,admin_only
 from .forms import *
-from .models import Location,Hospital,User,Ambulance,ICUVacancy,DoctorList,Services,CCU,NICUBooking
+from .models import *
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.forms import UserCreationForm
-
 from django.contrib.auth import authenticate, login, logout
-
 from django.contrib import messages
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 
@@ -78,11 +75,6 @@ def hospital(request):
     }
     return render(request,template_name='hospital.html',context=context)
 
-
-from django.shortcuts import render, get_object_or_404
-from .models import Hospital, ICUVacancy, NICU, Services, DoctorList
-
-
 def details(request, id):
     # Use H_ID to get the hospital instance
     hospital = get_object_or_404(Hospital, H_ID=id)
@@ -103,7 +95,6 @@ def details(request, id):
     }
 
     return render(request, 'Details.html', context)
-
 
 @login_required
 def nearby_hospitals(request):
@@ -162,7 +153,6 @@ def delete_hospital(request, id):
         return redirect('hospital')
 
     return render(request, template_name='delete_hospital.html')
-
 
 #@login_required(login_url='login')
 def services(request):
@@ -262,6 +252,7 @@ def icuvac(request):
         'icuvac': icuvac,
     }
     return render(request, template_name='ICUVacancy.html',context=context)
+
 @allowed_user(allowed_roles=['Admin'])
 def add_ICU(request):
     form = ICUForm()
@@ -432,4 +423,3 @@ def delete_doctor(request, id):
         return redirect('DoctorList')
 
     return render(request, template_name='delete_doctor.html')
-
